@@ -2,6 +2,7 @@ package qrparking.models;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,12 +24,16 @@ public class Administrador {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
+	@Column(length = 75)
 	private String nome;
-
+	
+	@Column(length = 20)
 	private String senha;
 	
+	@Column(length = 11)
 	private String cpf;
 
+	@Column(length = 120)
 	private String email;
 	
 	private Date dtCadastro;

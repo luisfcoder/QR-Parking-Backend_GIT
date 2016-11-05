@@ -1,12 +1,19 @@
 package qrparking.controllers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,6 +26,7 @@ import qrparking.service.Constantes;
  */
 @RestController
 @CrossOrigin(origins = Constantes.HOME_IONIC)
+@RequestMapping(value="/administrador")
 public class AdministradorController {
 
   // ------------------------
@@ -61,18 +69,11 @@ public class AdministradorController {
   /**
    * Retrieve the id for the administrador with the passed email address.
    */
-  @RequestMapping(value="/get-by-email")
+  @RequestMapping(value="/getId/{administradorId}")
   @ResponseBody
-  public String getByEmail(String email) {
-    String administradorId;
-    try {
-      Administrador administrador = administradorDao.getByEmail(email);
-      administradorId = String.valueOf(administrador.getId());
-    }
-    catch (Exception ex) {
-      return "Administrador not found: " + ex.toString();
-    }
-    return "The administrador id is: " + administradorId;
+  public Administrador getId(@PathVariable("administradorId") Long administradorId) {
+      Administrador administrador = administradorDao.getById(administradorId);
+	  return administrador;
   }
   
   @RequestMapping(value="/getAll")
@@ -91,19 +92,14 @@ public class AdministradorController {
   /**
    * Update the email and the name for the administrador indentified by the passed id.
    */
-  @RequestMapping(value="/update")
-  @ResponseBody
-  public String updateName(long id, String email, String name) {
-    try {
-      Administrador administrador = administradorDao.getById(id);
-      administrador.setEmail(email);
-      administrador.setNome(name);
-      administradorDao.update(administrador);
-    }
-    catch (Exception ex) {
-      return "Error updating the administrador: " + ex.toString();
-    }
-    return "Administrador succesfully updated!";
+  @RequestMapping(method = RequestMethod.POST)
+  public void updateName(@RequestBody Administrador administrador) {
+	  	if(administrador.getId() != 0){
+	  		administradorDao.update(administrador);
+	  	}else{
+	  		administrador.setDtCadastro(new Date());
+	  		administradorDao.create(administrador);
+	  	}
   } 
 
   // ------------------------

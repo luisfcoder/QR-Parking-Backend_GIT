@@ -1,4 +1,4 @@
-package qrparking.models;
+package qrparking.models.administrador;
 
 import java.util.Date;
 
@@ -47,18 +47,6 @@ public class Administrador {
 	 */
 	
 	public Administrador() {
-	}
-	
-	
-	public Administrador(long id) {
-		this.id = id;
-	}
-	
-
-	public Administrador(String nome, String email) {
-		super();
-		this.nome = nome;
-		this.email = email;
 	}
 
 

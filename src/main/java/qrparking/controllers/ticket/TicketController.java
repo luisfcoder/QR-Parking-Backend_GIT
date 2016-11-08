@@ -1,6 +1,4 @@
-package qrparking.controllers.administrador;
-
-import java.util.List;
+package qrparking.controllers.ticket;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,34 +11,35 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import qrparking.models.administrador.Administrador;
+import qrparking.models.ticket.Ticket;
 import qrparking.service.Constantes;
-import qrparking.service.administrador.AdministradorService;
+import qrparking.service.ticket.TicketService;
 
 @RestController
 @CrossOrigin(origins = Constantes.HOME_IONIC)
-@RequestMapping(value = "/administrador")
-public class AdministradorController {
+@RequestMapping(value = "/ticket")
+public class TicketController {
 
 	@Autowired
-	AdministradorService administradorService;
+	TicketService ticketService;
 
-	@RequestMapping(value = "/buscarPorId/{administradorId}")
+	@RequestMapping(value = "/buscarPorId/{ticketId}")
 	@ResponseBody
-	public Administrador getId(@PathVariable("administradorId") Long administradorId) {
-		Administrador administrador = administradorService.buscarPorId(administradorId);
-		return administrador;
+	public Ticket getId(@PathVariable("ticketId") Long ticketId) {
+		Ticket ticket = ticketService.buscarPorId(ticketId);
+		return ticket;
 	}
-
-	@RequestMapping(value = "/buscarTodos")
+	
+	@RequestMapping(value = "/gerar")
 	@ResponseBody
-	public List<Administrador> getAll() {
-		return administradorService.buscarTodos();
+	public Ticket gerar() {
+		Ticket ticket = ticketService.gerarTicket();
+		return ticket;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<HttpStatus> salvar(@RequestBody Administrador administrador) {
-		administradorService.salvar(administrador);
+	public ResponseEntity<HttpStatus> salvar(@RequestBody Ticket ticket) {
+		ticketService.salvar(ticket);
 		return ResponseEntity.ok(HttpStatus.OK);
 	}
 }

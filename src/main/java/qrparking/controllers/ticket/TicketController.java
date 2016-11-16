@@ -1,5 +1,7 @@
 package qrparking.controllers.ticket;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +37,12 @@ public class TicketController {
 	public Ticket gerar() {
 		Ticket ticket = ticketService.gerarTicket();
 		return ticket;
+	}
+	
+	@RequestMapping(value = "/calcular/{ticketId}")
+	@ResponseBody
+	public Map<String, Number> calcular(@PathVariable("ticketId") Long ticketId) {
+		return ticketService.calcular(ticketId);
 	}
 
 	@RequestMapping(method = RequestMethod.POST)

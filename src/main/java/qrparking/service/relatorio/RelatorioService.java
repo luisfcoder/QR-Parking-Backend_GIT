@@ -22,12 +22,16 @@ public class RelatorioService {
 		relatorio = relatorioDao.financeiroBuscarTodos();
 		return relatorio;
 	}
-	
+
 	public void financeiroSalvar(PagamentoVO dadosPagamento) {
-	RelatorioFinanceiro relatorioFinanceiro = new RelatorioFinanceiro();
-	relatorioFinanceiro.setTicket(dadosPagamento.getTicket());
-	relatorioFinanceiro.setValorPago(dadosPagamento.getValor());
-	relatorioFinanceiro.setDtPagamento(new Date());
-	relatorioDao.financeiroSalvar(relatorioFinanceiro);
+		RelatorioFinanceiro relatorioFinanceiro = new RelatorioFinanceiro();
+		relatorioFinanceiro.setTicket(dadosPagamento.getTicket());
+		relatorioFinanceiro.setValorPago(dadosPagamento.getValor());
+		relatorioFinanceiro.setDtPagamento(new Date());
+		relatorioDao.financeiroSalvar(relatorioFinanceiro);
+	}
+
+	public RelatorioFinanceiro buscarPorIdTicket(Long ticketId) {
+		return relatorioDao.buscarUltimoPagamentoPorIdTicket(ticketId);
 	}
 }

@@ -45,6 +45,12 @@ public class TicketController {
 	public Map<String, Number> calcular(@PathVariable("ticketId") Long ticketId) {
 		return ticketService.calcular(ticketId);
 	}
+	
+	@RequestMapping(value = "/validarSaida/{ticketId}")
+	@ResponseBody
+	public String validarSaida(@PathVariable("ticketId") Long ticketId) {
+		return ticketService.valiarSaida(ticketId);
+	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<HttpStatus> salvar(@RequestBody Ticket ticket) {

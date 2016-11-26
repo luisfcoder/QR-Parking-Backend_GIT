@@ -1,5 +1,7 @@
 package qrparking.service.parametro;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,16 @@ public class ParametroService {
 	}
 
 	public void salvar(Parametro parametro) {
-		parametroDao.update(parametro);
+		Parametro novoParametro = new Parametro();
+		novoParametro.setJustificativa(parametro.getJustificativa());
+		novoParametro.setTolerancia(parametro.getTolerancia());
+		novoParametro.setValorMinuto(parametro.getValorMinuto());
+		novoParametro.setDtAlteracao(new Date());
+		parametroDao.salvar(novoParametro);
+	}
+
+	public Parametro buscarAtual() {
+		Parametro parametro = parametroDao.buscarAtual();
+		return parametro;
 	}
 }

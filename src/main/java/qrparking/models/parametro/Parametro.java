@@ -1,13 +1,17 @@
 package qrparking.models.parametro;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import qrparking.models.administrador.Administrador;
 
 @Entity
 @Table(name = "parametro")
@@ -30,6 +34,12 @@ public class Parametro {
 	
 	@Column(length = 150, nullable = false)
 	private String justificativa;
+	
+	@ManyToOne
+	private Administrador administrador;
+	
+	@Column(nullable = false)
+	private Date dtAlteracao;
 	
 	/*
 	 * MÉTODOS PÚBLICOS
@@ -68,6 +78,22 @@ public class Parametro {
 
 	public void setJustificativa(String justificativa) {
 		this.justificativa = justificativa;
+	}
+
+	public Administrador getAdministrador() {
+		return administrador;
+	}
+
+	public void setAdministrador(Administrador administrador) {
+		this.administrador = administrador;
+	}
+
+	public Date getDtAlteracao() {
+		return dtAlteracao;
+	}
+
+	public void setDtAlteracao(Date dtAlteracao) {
+		this.dtAlteracao = dtAlteracao;
 	}
 	
 }

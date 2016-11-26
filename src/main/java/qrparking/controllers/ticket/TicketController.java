@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import qrparking.models.pagamento.vo.PagamentoVO;
 import qrparking.models.ticket.Ticket;
 import qrparking.service.Constantes;
 import qrparking.service.ticket.TicketService;
@@ -48,6 +49,12 @@ public class TicketController {
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<HttpStatus> salvar(@RequestBody Ticket ticket) {
 		ticketService.salvar(ticket);
+		return ResponseEntity.ok(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/processarPagamento", method = RequestMethod.POST)
+	public ResponseEntity<HttpStatus> processarPagamento(@RequestBody PagamentoVO dadosPagamento) {
+		ticketService.pagar(dadosPagamento);
 		return ResponseEntity.ok(HttpStatus.OK);
 	}
 }

@@ -24,16 +24,16 @@ public class Administrador {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
-	@Column(length = 75, nullable = false)
+	@Column(length = 100, nullable = false)
 	private String nome;
 	
-	@Column(length = 20, nullable = false)
+	@Column(length = 65, nullable = false)
 	private String senha;
 	
 	@Column(length = 11, nullable = false)
 	private String cpf;
 
-	@Column(length = 120, nullable = false)
+	@Column(length = 100, nullable = false)
 	private String email;
 	
 	@Column(nullable = false)

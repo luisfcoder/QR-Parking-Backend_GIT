@@ -9,11 +9,12 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
-import qrparking.models.pagamento.vo.FinanceiroFiltrosParametroVO;
+import qrparking.models.pagamento.vo.FiltrosVO;
+import qrparking.models.parametro.Parametro;
 
 @Repository
 @Transactional
-public class RelatorioFinanceiroDao {
+public class RelatorioDao {
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -36,15 +37,15 @@ public class RelatorioFinanceiroDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<RelatorioFinanceiro> financeiroBuscarPorPeriodo(FinanceiroFiltrosParametroVO parametro) {
-		String where = definirWhere(parametro);
+	public List<RelatorioFinanceiro> financeiroBuscarPorPeriodo(FiltrosVO parametro) {
+		String where = definirWhereFinanceiro(parametro);
 		Query relatorio = entityManager.createQuery("select r from RelatorioFinanceiro r " + where);
 		definirParametros(parametro, relatorio);
 		
 		return relatorio.getResultList();
 	}
 
-	private String definirWhere(FinanceiroFiltrosParametroVO parametro) {
+	private String definirWhereFinanceiro(FiltrosVO parametro) {
 		String where = "";
 		if (parametro.getDataInicial() != null && parametro.getDataFinal() != null) {
 			where = "where r.dtPagamento BETWEEN :dataInicio AND :dataFim";
@@ -52,12 +53,28 @@ public class RelatorioFinanceiroDao {
 		return where;
 	}
 
-	private void definirParametros(FinanceiroFiltrosParametroVO parametro, Query relatorio) {
+	private void definirParametros(FiltrosVO parametro, Query relatorio) {
 		if (parametro.getDataInicial() != null && parametro.getDataFinal() != null) {
 			relatorio
 			.setParameter("dataInicio", parametro.getDataInicial())
 			.setParameter("dataFim", parametro.getDataFinal());
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Parametro> parametroBuscarPorPeriodo(FiltrosVO parametro) {
+		String where = definirWhereParametro(parametro);
+		Query relatorio = entityManager.createQuery("select p from Parametro p " + where);
+		definirParametros(parametro, relatorio);
+		return relatorio.getResultList();
+	}
+	
+	private String definirWhereParametro(FiltrosVO filtros) {
+		String where = "";
+		if (filtros.getDataInicial() != null && filtros.getDataFinal() != null) {
+			where = "where p.dtAlteracao BETWEEN :dataInicio AND :dataFim";
+		}
+		return where;
 	}
 
 }

@@ -2,7 +2,7 @@ package qrparking.models.pagamento.vo;
 
 import java.util.Date;
 
-public class FinanceiroFiltrosParametroVO {
+public class FiltrosVO {
 	
 	public Date dataInicial;
 	public Date dataFinal;

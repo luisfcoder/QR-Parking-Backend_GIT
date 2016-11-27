@@ -21,6 +21,11 @@ import qrparking.service.relatorio.RelatorioService;
 @Service
 public class TicketService {
 
+	private static final String TRANSACAO_NAO_AUTORIZADA = "Transação não autorizada.";
+	private static final String TICKET_NAO_PAGO = "Ticket não pago, saída não permitida. Valor devido: ";
+	private static final String TOLERANCIA_VENCIDA = "Tolerância de saída vencida, pague o ticket novamente. Valor devido: ";
+	private static final String SAIDA_LIBERADA = "Saída liberada.";
+
 	@Autowired
 	private TicketDao ticketDao;
 
@@ -99,20 +104,20 @@ public class TicketService {
 		double valorDevido = getValorCalculado(parametro, permanencia);
 		
 		if (isTicketNaTolerancia(parametro, permanencia)) {
-			return "Saída liberada.";
+			return SAIDA_LIBERADA;
 		}
 
 		if (isTicketPago(relatorioFinanceiro) && !isTicketNaTolerancia(parametro, permanencia)) {
-				throw new IllegalArgumentException("Tolerância de saída vencida, pague o ticket novamente. Valor devido: " + valorDevido);
+				throw new IllegalArgumentException(TOLERANCIA_VENCIDA + valorDevido);
 		}
 		
-		throw new IllegalArgumentException("Ticket não pago, saída não permitida. Valor devido: " + valorDevido);
+		throw new IllegalArgumentException(TICKET_NAO_PAGO + valorDevido);
 	}
 
 	public void pagar(PagamentoVO dadosPagamento) {
 		// Simulando uma negação de transação
 		if (dadosPagamento.cartao.equalsIgnoreCase("0")) {
-			throw new IllegalArgumentException("Transação não autorizada.");
+			throw new IllegalArgumentException(TRANSACAO_NAO_AUTORIZADA);
 		}
 		;
 

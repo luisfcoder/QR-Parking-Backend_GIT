@@ -18,6 +18,7 @@ import qrparking.models.administrador.AdministradorDao;
 @Service
 public class AdministradorService {
 
+	private static final String CPF_CADASTRADO = "CPF já cadastrado";
 	@Autowired
 	private AdministradorDao administradorDao;
 
@@ -27,7 +28,7 @@ public class AdministradorService {
 		}
 
 		if (administradorDao.getCpfExistente(administrador.getCpf(), administrador.getId())) {
-			throw new IllegalArgumentException("CPF já cadastrado");
+			throw new IllegalArgumentException(CPF_CADASTRADO);
 		}
 
 		String senhaCripto = criptografarSenha(administrador);

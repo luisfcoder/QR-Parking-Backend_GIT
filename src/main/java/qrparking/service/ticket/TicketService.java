@@ -99,20 +99,20 @@ public class TicketService {
 		double valorDevido = getValorCalculado(parametro, permanencia);
 		
 		if (isTicketNaTolerancia(parametro, permanencia)) {
-			return "Saída liberada!";
+			return "Saída liberada.";
 		}
 
 		if (isTicketPago(relatorioFinanceiro) && !isTicketNaTolerancia(parametro, permanencia)) {
 				throw new IllegalArgumentException("Tolerância de saída vencida, pague o ticket novamente. Valor devido: " + valorDevido);
 		}
 		
-		throw new IllegalArgumentException("Ticket não pago, saída não permitida! Valor devido: " + valorDevido);
+		throw new IllegalArgumentException("Ticket não pago, saída não permitida. Valor devido: " + valorDevido);
 	}
 
 	public void pagar(PagamentoVO dadosPagamento) {
 		// Simulando uma negação de transação
 		if (dadosPagamento.cartao.equalsIgnoreCase("0")) {
-			throw new IllegalArgumentException("Transação não autorizada pelo cartão!");
+			throw new IllegalArgumentException("Transação não autorizada.");
 		}
 		;
 

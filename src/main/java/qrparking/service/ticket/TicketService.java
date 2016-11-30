@@ -56,6 +56,7 @@ public class TicketService {
 	public Map<String, Number> calcular(Long ticketId) {
 		Ticket ticket = this.buscarPorId(ticketId);
 		validarExistenciaTicket(ticket);
+		validarSeJaSaiu(ticket);
 		Parametro parametro = parametroService.buscarAtual();
 		RelatorioFinanceiro relatorioFinanceiro = relatorioService.buscarPorIdTicket(ticketId);
 

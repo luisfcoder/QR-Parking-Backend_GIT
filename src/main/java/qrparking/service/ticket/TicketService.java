@@ -21,6 +21,7 @@ import qrparking.service.relatorio.RelatorioService;
 @Service
 public class TicketService {
 
+	private static final String TICKET_UTILIZADO = "Este ticket já foi utilizado.";
 	private static final String TICKET_INVALIDO = "Ticket inválido, procure a administração.";
 	private static final String TRANSACAO_NAO_AUTORIZADA = "Transação não autorizada.";
 	private static final String TICKET_NAO_PAGO = "Ticket não pago, saída não permitida. Valor devido: ";
@@ -130,7 +131,7 @@ public class TicketService {
 
 	private void validarSeJaSaiu(Ticket ticket) {
 		if(ticket.getDtSaida()!=null){
-			throw new IllegalArgumentException("Este ticket já foi utilizado.");
+			throw new IllegalArgumentException(TICKET_UTILIZADO);
 		}
 	}
 

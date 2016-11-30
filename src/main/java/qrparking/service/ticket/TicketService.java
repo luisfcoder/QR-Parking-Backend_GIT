@@ -96,15 +96,17 @@ public class TicketService {
 		return false;
 	}
 
-	public String valiarSaida(Long ticketId) {
+	public Map<String, String> valiarSaida(Long ticketId) {
 		Ticket ticket = this.buscarPorId(ticketId);
 		RelatorioFinanceiro relatorioFinanceiro = relatorioService.buscarPorIdTicket(ticketId);
 		Parametro parametro = parametroService.buscarAtual();
 		long permanencia = getPermanencia(ticket, relatorioFinanceiro);
 		double valorDevido = getValorCalculado(parametro, permanencia);
+		Map<String, String> retorno = new HashMap<String, String>();
 		
 		if (isTicketNaTolerancia(parametro, permanencia)) {
-			return SAIDA_LIBERADA;
+			retorno.put("valor", SAIDA_LIBERADA);
+			return retorno;
 		}
 
 		if (isTicketPago(relatorioFinanceiro) && !isTicketNaTolerancia(parametro, permanencia)) {

@@ -5,7 +5,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import qrparking.models.pagamento.vo.PagamentoVO;
 import qrparking.models.ticket.Ticket;
-import qrparking.service.Constantes;
 import qrparking.service.ticket.TicketService;
 
 @RestController
@@ -47,7 +45,7 @@ public class TicketController {
 	
 	@RequestMapping(value = "/validarSaida/{ticketId}")
 	@ResponseBody
-	public String validarSaida(@PathVariable("ticketId") Long ticketId) {
+	public Map<String, String> validarSaida(@PathVariable("ticketId") Long ticketId) {
 		return ticketService.valiarSaida(ticketId);
 	}
 

@@ -20,6 +20,9 @@ public class Ticket {
 
 	@Column(nullable = false)
 	private Date dtEntrada;
+	
+	@Column
+	private Date dtSaida;
 
 	public long getId() {
 		return id;
@@ -35,6 +38,14 @@ public class Ticket {
 
 	public void setDtEntrada(Date dtEntrada) {
 		this.dtEntrada = dtEntrada;
+	}
+
+	public Date getDtSaida() {
+		return dtSaida;
+	}
+
+	public void setDtSaida(Date dtSaida) {
+		this.dtSaida = dtSaida;
 	}
 
 }

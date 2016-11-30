@@ -15,7 +15,6 @@ import qrparking.service.Constantes;
 import qrparking.service.parametro.ParametroService;
 
 @RestController
-@CrossOrigin(origins = Constantes.HOME_IONIC)
 @RequestMapping(value = "/parametro")
 public class ParametroController {
 

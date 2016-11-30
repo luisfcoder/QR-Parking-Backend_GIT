@@ -19,7 +19,6 @@ import qrparking.service.Constantes;
 import qrparking.service.ticket.TicketService;
 
 @RestController
-@CrossOrigin(origins = Constantes.HOME_IONIC)
 @RequestMapping(value = "/ticket")
 public class TicketController {
 

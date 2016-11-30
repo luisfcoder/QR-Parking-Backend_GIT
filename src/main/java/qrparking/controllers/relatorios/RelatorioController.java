@@ -16,7 +16,6 @@ import qrparking.service.Constantes;
 import qrparking.service.relatorio.RelatorioService;
 
 @RestController
-@CrossOrigin(origins = Constantes.HOME_IONIC)
 @RequestMapping(value = "/relatorio")
 public class RelatorioController {
 	

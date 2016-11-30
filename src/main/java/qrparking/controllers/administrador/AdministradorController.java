@@ -18,7 +18,6 @@ import qrparking.service.Constantes;
 import qrparking.service.administrador.AdministradorService;
 
 @RestController
-@CrossOrigin(origins = Constantes.HOME_IONIC)
 @RequestMapping(value = "/administrador")
 public class AdministradorController {
 

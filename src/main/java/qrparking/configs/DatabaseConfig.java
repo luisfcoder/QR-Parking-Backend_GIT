@@ -14,13 +14,17 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
  * Contains database configurations.
  */
 @Configuration
 @EnableTransactionManagement
-public class DatabaseConfig {
+@EnableWebMvc
+public class DatabaseConfig extends WebMvcConfigurerAdapter{
 
   // ------------------------
   // PUBLIC METHODS
@@ -39,6 +43,11 @@ public class DatabaseConfig {
     dataSource.setPassword(env.getProperty("db.password"));
     return dataSource;
   }
+  
+  @Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**");
+	}
 
   /**
    * Declare the JPA entity manager factory.

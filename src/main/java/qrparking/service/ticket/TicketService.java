@@ -21,6 +21,8 @@ import qrparking.service.relatorio.RelatorioService;
 @Service
 public class TicketService {
 
+	private static final String TICKET_UTILIZADO = "Este ticket já foi utilizado.";
+	private static final String TICKET_INVALIDO = "Ticket inválido, procure a administração.";
 	private static final String TRANSACAO_NAO_AUTORIZADA = "Transação não autorizada.";
 	private static final String TICKET_NAO_PAGO = "Ticket não pago, saída não permitida. Valor devido: ";
 	private static final String TOLERANCIA_VENCIDA = "Tolerância de saída vencida, pague o ticket novamente. Valor devido: ";
@@ -53,6 +55,8 @@ public class TicketService {
 
 	public Map<String, Number> calcular(Long ticketId) {
 		Ticket ticket = this.buscarPorId(ticketId);
+		validarExistenciaTicket(ticket);
+		validarSeJaSaiu(ticket);
 		Parametro parametro = parametroService.buscarAtual();
 		RelatorioFinanceiro relatorioFinanceiro = relatorioService.buscarPorIdTicket(ticketId);
 
@@ -68,6 +72,12 @@ public class TicketService {
 		calculo.put("valor", valor);
 		calculo.put("permanencia", permanencia);
 		return calculo;
+	}
+
+	private void validarExistenciaTicket(Ticket ticket) {
+		if(ticket == null){
+			throw new IllegalArgumentException(TICKET_INVALIDO);
+		}
 	}
 
 	private boolean isTicketNaTolerancia(Parametro parametro, long permanencia) {
@@ -96,15 +106,21 @@ public class TicketService {
 		return false;
 	}
 
-	public String valiarSaida(Long ticketId) {
+	public Map<String, String> valiarSaida(Long ticketId) {
 		Ticket ticket = this.buscarPorId(ticketId);
+		validarExistenciaTicket(ticket);
+		validarSeJaSaiu(ticket);
 		RelatorioFinanceiro relatorioFinanceiro = relatorioService.buscarPorIdTicket(ticketId);
 		Parametro parametro = parametroService.buscarAtual();
 		long permanencia = getPermanencia(ticket, relatorioFinanceiro);
 		double valorDevido = getValorCalculado(parametro, permanencia);
+		Map<String, String> retorno = new HashMap<String, String>();
 		
 		if (isTicketNaTolerancia(parametro, permanencia)) {
-			return SAIDA_LIBERADA;
+			retorno.put("valor", SAIDA_LIBERADA);
+			ticket.setDtSaida(new Date());
+			ticketDao.salvar(ticket);
+			return retorno;
 		}
 
 		if (isTicketPago(relatorioFinanceiro) && !isTicketNaTolerancia(parametro, permanencia)) {
@@ -112,6 +128,12 @@ public class TicketService {
 		}
 		
 		throw new IllegalArgumentException(TICKET_NAO_PAGO + valorDevido);
+	}
+
+	private void validarSeJaSaiu(Ticket ticket) {
+		if(ticket.getDtSaida()!=null){
+			throw new IllegalArgumentException(TICKET_UTILIZADO);
+		}
 	}
 
 	public void pagar(PagamentoVO dadosPagamento) {

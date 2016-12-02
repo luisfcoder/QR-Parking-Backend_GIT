@@ -54,7 +54,7 @@ public class AdministradorDao {
 
 	public Administrador getAdministradorPorCredenciais(Administrador administrador) {
 		try{
-		return (Administrador) entityManager.createQuery("from Administrador where cpf = :cpf AND senha = :senha")
+		return (Administrador) entityManager.createQuery("from Administrador where cpf = :cpf AND senha = :senha AND dtInativacao is null")
 				.setParameter("cpf", administrador.getCpf())
 				.setParameter("senha", administrador.getSenha())
 				.getSingleResult();

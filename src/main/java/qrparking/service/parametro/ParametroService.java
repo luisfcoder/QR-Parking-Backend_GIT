@@ -26,6 +26,7 @@ public class ParametroService {
 		novoParametro.setTolerancia(parametro.getTolerancia());
 		novoParametro.setValorMinuto(parametro.getValorMinuto());
 		novoParametro.setDtAlteracao(new Date());
+		novoParametro.setAdministrador(parametro.getAdministrador());
 		parametroDao.salvar(novoParametro);
 	}
 

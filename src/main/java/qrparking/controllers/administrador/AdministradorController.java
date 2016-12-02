@@ -42,8 +42,7 @@ public class AdministradorController {
 	}
 	
 	@RequestMapping(value = "/buscarPorCredenciais", method = RequestMethod.POST)
-	public ResponseEntity<HttpStatus> buscarPorCredenciais(@RequestBody Administrador administrador) {
-		administradorService.buscarPorCredenciais(administrador);
-		return ResponseEntity.ok(HttpStatus.OK);
+	public Administrador buscarPorCredenciais(@RequestBody Administrador administrador) {
+		return administradorService.buscarPorCredenciais(administrador);
 	}
 }

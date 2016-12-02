@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>qrparking</groupId>
-	<artifactId>spring-boot-mysql-jpa-hibernate</artifactId>
+	<artifactId>qrparking-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>spring-boot-mysql-jpa-hibernate</name>
-	<description>Use JPA + Hibernate + MySQL in Spring Boot</description>
+	<name>qrparking-backend</name>
+	<description>QR-Parking Implementações do backend</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

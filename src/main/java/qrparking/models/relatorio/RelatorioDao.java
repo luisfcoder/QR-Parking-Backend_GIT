@@ -77,4 +77,8 @@ public class RelatorioDao {
 		return where;
 	}
 
+	public RelatorioFinanceiro financeiroGetById(Long idPagamento) {
+		return entityManager.find(RelatorioFinanceiro.class, idPagamento);
+	}
+
 }

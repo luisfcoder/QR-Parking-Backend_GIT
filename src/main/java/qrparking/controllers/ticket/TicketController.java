@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import qrparking.models.pagamento.vo.ComprovanteVO;
 import qrparking.models.pagamento.vo.PagamentoVO;
+import qrparking.models.relatorio.RelatorioFinanceiro;
 import qrparking.models.ticket.Ticket;
 import qrparking.service.ticket.TicketService;
 
@@ -56,8 +58,13 @@ public class TicketController {
 	}
 	
 	@RequestMapping(value="/processarPagamento", method = RequestMethod.POST)
-	public ResponseEntity<HttpStatus> processarPagamento(@RequestBody PagamentoVO dadosPagamento) {
-		ticketService.pagar(dadosPagamento);
+	public RelatorioFinanceiro processarPagamento(@RequestBody PagamentoVO dadosPagamento) {
+		return ticketService.pagar(dadosPagamento);
+	}
+	
+	@RequestMapping(value="/enviarComprovante", method = RequestMethod.POST)
+	public ResponseEntity<HttpStatus> enviarComprovante(@RequestBody ComprovanteVO comprovanteVO) {
+		ticketService.enviarComprovante(comprovanteVO);
 		return ResponseEntity.ok(HttpStatus.OK);
 	}
 }

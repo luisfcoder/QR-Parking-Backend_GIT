@@ -4,12 +4,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import qrparking.models.pagamento.vo.ComprovanteVO;
 import qrparking.models.pagamento.vo.PagamentoVO;
 import qrparking.models.parametro.Parametro;
 import qrparking.models.relatorio.RelatorioFinanceiro;
@@ -17,6 +21,7 @@ import qrparking.models.ticket.Ticket;
 import qrparking.models.ticket.TicketDao;
 import qrparking.service.parametro.ParametroService;
 import qrparking.service.relatorio.RelatorioService;
+import qrparking.service.util.EnviarEmail;
 
 @Service
 public class TicketService {
@@ -36,6 +41,9 @@ public class TicketService {
 
 	@Autowired
 	private ParametroService parametroService;
+
+	@Autowired
+	private EnviarEmail emailService;
 
 	public Ticket buscarPorId(@PathVariable("ticketId") Long ticketId) {
 		Ticket ticket = ticketDao.getById(ticketId);
@@ -75,7 +83,7 @@ public class TicketService {
 	}
 
 	private void validarExistenciaTicket(Ticket ticket) {
-		if(ticket == null){
+		if (ticket == null) {
 			throw new IllegalArgumentException(TICKET_INVALIDO);
 		}
 	}
@@ -115,7 +123,7 @@ public class TicketService {
 		long permanencia = getPermanencia(ticket, relatorioFinanceiro);
 		double valorDevido = getValorCalculado(parametro, permanencia);
 		Map<String, String> retorno = new HashMap<String, String>();
-		
+
 		if (isTicketNaTolerancia(parametro, permanencia)) {
 			retorno.put("valor", SAIDA_LIBERADA);
 			ticket.setDtSaida(new Date());
@@ -124,25 +132,41 @@ public class TicketService {
 		}
 
 		if (isTicketPago(relatorioFinanceiro) && !isTicketNaTolerancia(parametro, permanencia)) {
-				throw new IllegalArgumentException(TOLERANCIA_VENCIDA + valorDevido);
+			throw new IllegalArgumentException(TOLERANCIA_VENCIDA + valorDevido);
 		}
-		
+
 		throw new IllegalArgumentException(TICKET_NAO_PAGO + valorDevido);
 	}
 
 	private void validarSeJaSaiu(Ticket ticket) {
-		if(ticket.getDtSaida()!=null){
+		if (ticket.getDtSaida() != null) {
 			throw new IllegalArgumentException(TICKET_UTILIZADO);
 		}
 	}
 
-	public void pagar(PagamentoVO dadosPagamento) {
+	public RelatorioFinanceiro pagar(PagamentoVO dadosPagamento) {
 		// Simulando uma negação de transação
 		if (dadosPagamento.cartao.equalsIgnoreCase("0")) {
 			throw new IllegalArgumentException(TRANSACAO_NAO_AUTORIZADA);
 		}
 		;
 
-		relatorioService.financeiroSalvar(dadosPagamento);
+		return relatorioService.financeiroSalvar(dadosPagamento);
+	}
+
+	public void enviarComprovante(ComprovanteVO comprovanteVO) {
+		try {
+			RelatorioFinanceiro relatorioFinanceiro = relatorioService.buscarPorId(comprovanteVO.getIdPagamento());
+			StringBuilder sb = new StringBuilder();
+			sb.append("==== Dados de pagamento\n").append("\nValor :" + relatorioFinanceiro.getValorPago())
+					.append("\nData de pagamento: " + relatorioFinanceiro.getDtPagamento());
+			System.out.println("=====> Conteuddo email \n" + sb.toString());
+			emailService.enviarEmail(comprovanteVO.getEmail(), sb.toString());
+		} catch (AddressException e) {
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+
 	}
 }

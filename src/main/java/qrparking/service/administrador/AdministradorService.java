@@ -46,7 +46,7 @@ public class AdministradorService {
 		MessageDigest algorithm;
 		byte[] messageDigest = null;
 		try {
-			algorithm = MessageDigest.getInstance("SHA-256");
+			algorithm = MessageDigest.getInstance("MD5");
 			try {
 				messageDigest = algorithm.digest(senhaOriginal.getBytes("UTF-8"));
 			} catch (UnsupportedEncodingException e) {

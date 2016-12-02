@@ -20,12 +20,12 @@ public class RelatorioService {
 	@Autowired
 	private RelatorioDao relatorioDao;
 
-	public void financeiroSalvar(PagamentoVO dadosPagamento) {
+	public RelatorioFinanceiro financeiroSalvar(PagamentoVO dadosPagamento) {
 		RelatorioFinanceiro relatorioFinanceiro = new RelatorioFinanceiro();
 		relatorioFinanceiro.setTicket(dadosPagamento.getTicket());
 		relatorioFinanceiro.setValorPago(dadosPagamento.getValor());
 		relatorioFinanceiro.setDtPagamento(new Date());
-		relatorioDao.financeiroSalvar(relatorioFinanceiro);
+		return relatorioDao.financeiroSalvar(relatorioFinanceiro);
 	}
 
 	public RelatorioFinanceiro buscarPorIdTicket(Long ticketId) {
@@ -48,5 +48,9 @@ public class RelatorioService {
 		}
 		parametro.setDataFinal(new DateTime(parametro.dataFinal).plusDays(1).toDate());
 		return relatorioDao.parametroBuscarPorPeriodo(parametro);
+	}
+
+	public RelatorioFinanceiro buscarPorId(Long idPagamento) {
+		return relatorioDao.financeiroGetById(idPagamento);
 	}
 }

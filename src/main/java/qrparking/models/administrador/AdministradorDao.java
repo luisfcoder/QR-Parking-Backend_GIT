@@ -21,9 +21,8 @@ import org.springframework.stereotype.Repository;
 @Transactional
 public class AdministradorDao {
 
-	// ------------------------
-	// PUBLIC METHODS
-	// ------------------------
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	public void create(Administrador administrador) {
 		entityManager.persist(administrador);
@@ -53,13 +52,15 @@ public class AdministradorDao {
 		return;
 	}
 
-	// ------------------------
-	// PRIVATE FIELDS
-	// ------------------------
+	public Administrador getAdministradorPorCredenciais(Administrador administrador) {
+		try{
+		return (Administrador) entityManager.createQuery("from Administrador where cpf = :cpf AND senha = :senha")
+				.setParameter("cpf", administrador.getCpf())
+				.setParameter("senha", administrador.getSenha())
+				.getSingleResult();
+		}catch(Exception e){
+			return null;
+		}
+	}
 
-	// An EntityManager will be automatically injected from entityManagerFactory
-	// setup on DatabaseConfig class.
-	@PersistenceContext
-	private EntityManager entityManager;
-
-} // class UserDao
+}

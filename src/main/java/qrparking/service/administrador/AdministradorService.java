@@ -18,6 +18,7 @@ import qrparking.models.administrador.AdministradorDao;
 @Service
 public class AdministradorService {
 
+	private static final String DADOS_INCORRETOS = "CPF ou senha invnálidos";
 	private static final String CPF_CADASTRADO = "CPF já cadastrado";
 	@Autowired
 	private AdministradorDao administradorDao;
@@ -73,6 +74,13 @@ public class AdministradorService {
 	public Administrador buscarPorId(@PathVariable("administradorId") Long administradorId) {
 		Administrador administrador = administradorDao.getById(administradorId);
 		return administrador;
+	}
+
+	public void buscarPorCredenciais(Administrador administrador) {
+		administrador.setSenha(criptografarSenha(administrador));
+		if(administradorDao.getAdministradorPorCredenciais(administrador) == null){
+			throw new IllegalArgumentException(DADOS_INCORRETOS);
+		}
 	}
 
 }

@@ -33,20 +33,20 @@ public class RelatorioService {
 	}
 
 	public List<RelatorioFinanceiro> financeiroBuscarPorPeriodo(FiltrosVO parametro) {
-		parametro.setDataFinal(new DateTime(parametro.dataFinal).plusDays(1).toDate());
 		if(parametro.getDataInicial() != null && parametro.getDataFinal() != null 
 				&& parametro.getDataFinal().getTime() < parametro.getDataInicial().getTime()){
 			throw new IllegalArgumentException(DATA_FINAL_MENOR_INICIAL);
 		}
+		parametro.setDataFinal(new DateTime(parametro.dataFinal).plusDays(1).toDate());
 		return relatorioDao.financeiroBuscarPorPeriodo(parametro);
 	}
 	
 	public List<Parametro> parametroBuscarPorPeriodo(FiltrosVO parametro) {
-		parametro.setDataFinal(new DateTime(parametro.dataFinal).plusDays(1).toDate());
 		if(parametro.getDataInicial() != null && parametro.getDataFinal() != null 
 				&& parametro.getDataFinal().getTime() < parametro.getDataInicial().getTime()){
 			throw new IllegalArgumentException(DATA_FINAL_MENOR_INICIAL);
 		}
+		parametro.setDataFinal(new DateTime(parametro.dataFinal).plusDays(1).toDate());
 		return relatorioDao.parametroBuscarPorPeriodo(parametro);
 	}
 }

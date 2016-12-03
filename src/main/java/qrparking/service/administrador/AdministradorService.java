@@ -24,17 +24,24 @@ public class AdministradorService {
 	private AdministradorDao administradorDao;
 
 	public void salvar(@RequestBody Administrador administrador) {
-		if (administrador.getId() == 0) {
-			administrador.setDtCadastro(new Date());
-		}
 
 		if (administradorDao.getCpfExistente(administrador.getCpf(), administrador.getId())) {
 			throw new IllegalArgumentException(CPF_CADASTRADO);
 		}
 
-		String senhaCripto = criptografarSenha(administrador);
-
-		administrador.setSenha(senhaCripto);
+		if (administrador.getId() == 0) {
+			administrador.setDtCadastro(new Date());
+			String senhaCripto = criptografarSenha(administrador);
+			administrador.setSenha(senhaCripto);
+		} else {
+			if(administrador.getSenha() != null){
+				String senhaCripto = criptografarSenha(administrador);
+				administrador.setSenha(senhaCripto);
+			}else{
+				Administrador administradorCadastrado = administradorDao.getById(administrador.getId());
+				administrador.setSenha(administradorCadastrado.getSenha());
+			}
+		}
 
 		administradorDao.update(administrador);
 
@@ -77,9 +84,10 @@ public class AdministradorService {
 	}
 
 	public Administrador buscarPorCredenciais(Administrador administrador) {
-		administrador.setSenha(criptografarSenha(administrador));
+		String senhaCriptografada = criptografarSenha(administrador);
+		administrador.setSenha(senhaCriptografada);
 		Administrador administradorAutenticado = administradorDao.getAdministradorPorCredenciais(administrador);
-		if(administradorAutenticado == null){
+		if (administradorAutenticado == null) {
 			throw new IllegalArgumentException(DADOS_INCORRETOS);
 		}
 		return administradorAutenticado;

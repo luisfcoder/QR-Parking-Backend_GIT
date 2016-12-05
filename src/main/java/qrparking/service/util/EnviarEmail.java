@@ -29,7 +29,7 @@ public class EnviarEmail {
 		// Step2
 		getMailSession = Session.getDefaultInstance(mailServerProperties, null);
 		generateMailMessage = new MimeMessage(getMailSession);
-		generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress("luis-arts@hotmail.com"));
+		generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
 		generateMailMessage.setSubject("Comprovante - QR Parking");
 		String emailBody = corpo;
 		generateMailMessage.setContent(emailBody, "text/html");

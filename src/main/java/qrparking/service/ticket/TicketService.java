@@ -1,5 +1,6 @@
 package qrparking.service.ticket;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,7 +62,7 @@ public class TicketService {
 		return ticketDao.salvar(ticket);
 	}
 
-	public Map<String, Number> calcular(Long ticketId) {
+	public Map<Object, Object> calcular(Long ticketId) {
 		Ticket ticket = this.buscarPorId(ticketId);
 		validarExistenciaTicket(ticket);
 		validarSeJaSaiu(ticket);
@@ -69,9 +70,9 @@ public class TicketService {
 		RelatorioFinanceiro relatorioFinanceiro = relatorioService.buscarPorIdTicket(ticketId);
 
 		long permanencia = getPermanencia(ticket, relatorioFinanceiro);
-		double valor = 0L;
+		String valor = null;
 
-		Map<String, Number> calculo = new HashMap<String, Number>();
+		Map<Object, Object> calculo = new HashMap<>();
 
 		if (!isTicketNaTolerancia(parametro, permanencia)) {
 			valor = getValorCalculado(parametro, permanencia);
@@ -92,8 +93,9 @@ public class TicketService {
 		return permanencia <= parametro.getTolerancia();
 	}
 
-	private double getValorCalculado(Parametro parametro, long permanencia) {
-		return parametro.getValorMinuto().doubleValue() * permanencia;
+	private String getValorCalculado(Parametro parametro, long permanencia) {
+		DecimalFormat df = new DecimalFormat("0.##");
+		return df.format(parametro.getValorMinuto().doubleValue() * permanencia);
 	}
 
 	private long getPermanencia(Ticket ticket, RelatorioFinanceiro relatorioFinanceiro) {
@@ -121,7 +123,7 @@ public class TicketService {
 		RelatorioFinanceiro relatorioFinanceiro = relatorioService.buscarPorIdTicket(ticketId);
 		Parametro parametro = parametroService.buscarAtual();
 		long permanencia = getPermanencia(ticket, relatorioFinanceiro);
-		double valorDevido = getValorCalculado(parametro, permanencia);
+		String valorDevido = getValorCalculado(parametro, permanencia);
 		Map<String, String> retorno = new HashMap<String, String>();
 
 		if (isTicketNaTolerancia(parametro, permanencia)) {

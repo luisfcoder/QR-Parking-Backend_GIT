@@ -41,7 +41,7 @@ public class TicketController {
 	
 	@RequestMapping(value = "/calcular/{ticketId}")
 	@ResponseBody
-	public Map<String, Number> calcular(@PathVariable("ticketId") Long ticketId) {
+	public Map<?, ?> calcular(@PathVariable("ticketId") Long ticketId) {
 		return ticketService.calcular(ticketId);
 	}
 	
